@@ -1,4 +1,8 @@
-import type { OptimizeOptions } from 'svgo'
+import { Config as OptimizeOptions } from 'svgo'
+
+export type SvgoOptions = OptimizeOptions & {
+  exclude?: string[]
+}
 
 export type DomInject = 'body-first' | 'body-last'
 
@@ -12,7 +16,7 @@ export interface ViteSvgIconsPlugin {
    * svgo configuration, used to compress svg
    * @default：true
    */
-  svgoOptions?: boolean | OptimizeOptions
+  svgoOptions?: boolean | SvgoOptions
 
   /**
    * icon format

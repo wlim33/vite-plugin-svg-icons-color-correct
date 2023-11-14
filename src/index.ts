@@ -1,6 +1,10 @@
 import type { Plugin } from 'vite'
-import type { OptimizedSvg, OptimizeOptions } from 'svgo'
-import type { ViteSvgIconsPlugin, FileStats, DomInject } from './typing'
+import type {
+  ViteSvgIconsPlugin,
+  FileStats,
+  DomInject,
+  SvgoOptions,
+} from './typing'
 import fg from 'fast-glob'
 import getEtag from 'etag'
 import cors from 'cors'
@@ -8,7 +12,7 @@ import fs from 'fs-extra'
 import path from 'pathe'
 import Debug from 'debug'
 import SVGCompiler from 'svg-baker'
-import { optimize } from 'svgo'
+import { optimize, Output as OptimizedSvg } from 'svgo'
 import { normalizePath } from 'vite'
 import {
   SVG_DOM_ID,
@@ -72,7 +76,7 @@ export function createSvgIconsPlugin(opt: ViteSvgIconsPlugin): Plugin {
 
       const { code, idSet } = await createModuleCode(
         cache,
-        svgoOptions as OptimizeOptions,
+        svgoOptions as SvgoOptions,
         options,
       )
       if (isRegister) {
@@ -94,7 +98,7 @@ export function createSvgIconsPlugin(opt: ViteSvgIconsPlugin): Plugin {
           res.setHeader('Cache-Control', 'no-cache')
           const { code, idSet } = await createModuleCode(
             cache,
-            svgoOptions as OptimizeOptions,
+            svgoOptions as SvgoOptions,
             options,
           )
           const content = url.endsWith(registerId) ? code : idSet
@@ -112,7 +116,7 @@ export function createSvgIconsPlugin(opt: ViteSvgIconsPlugin): Plugin {
 
 export async function createModuleCode(
   cache: Map<string, FileStats>,
-  svgoOptions: OptimizeOptions,
+  svgoOptions: SvgoOptions,
   options: ViteSvgIconsPlugin,
 ) {
   const { insertHtml, idSet } = await compilerIcons(cache, svgoOptions, options)
@@ -169,7 +173,7 @@ function domInject(inject: DomInject = 'body-last') {
  */
 export async function compilerIcons(
   cache: Map<string, FileStats>,
-  svgOptions: OptimizeOptions,
+  svgOptions: SvgoOptions,
   options: ViteSvgIconsPlugin,
 ) {
   const { iconDirs } = options
@@ -226,7 +230,7 @@ export async function compilerIcons(
 export async function compilerIcon(
   file: string,
   symbolId: string,
-  svgOptions: OptimizeOptions,
+  svgOptions: SvgoOptions,
 ): Promise<string | null> {
   if (!file) {
     return null
