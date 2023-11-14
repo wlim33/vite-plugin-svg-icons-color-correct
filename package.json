@@ -1,5 +1,5 @@
 {
-  "name": "@lordbeanbag/vite-plugin-svg-icons",
+  "name": "vite-plugin-svg-icons-color-correct",
   "version": "2.1.1",
   "description": "Vite Plugin for fast creating SVG sprites.",
   "main": "dist/index.cjs",
